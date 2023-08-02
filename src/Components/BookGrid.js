@@ -2,7 +2,7 @@ import BookThumbNail from "./BookThumbNail";
 
 export default function CardGrid({books}) {
   console.log(`${JSON.stringify(books)} and ${"hi"}`); 
-  if (books.d.items !== undefined){
+  if (books !== null && books.d.items !== undefined && books.d.items !== null){
     return (
       <div className="flexbox-grid">
         {books.d.items.map( (book) => {
