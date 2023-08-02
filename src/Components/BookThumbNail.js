@@ -2,6 +2,7 @@ import { Card } from "react-bootstrap";
 export default function BookThumbNail({imageSrc, title, author, pubDate, link}) {
   const myStyle = {
     width: '13rem',
+    height: 'auto',
     margin: '1rem'
   }
   return (
@@ -14,7 +15,7 @@ export default function BookThumbNail({imageSrc, title, author, pubDate, link}) 
 
     </button> */
 
-    <a href={link} style={myStyle} >
+    <a href={link} style={myStyle}>
       <Card>
         <Card.Img variant="top" src={imageSrc} alt={"No image found"} />
         <Card.Body>
