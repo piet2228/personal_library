@@ -13,7 +13,7 @@ export default function() {
     if (queryParams.get("search_bar") != null){
       setLoading(true);
       fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=${queryParams.get("search_bar")}&maxResults=40`
+        `https://www.googleapis.com/books/v1/volumes?q=${queryParams.get("search_bar")}&startIndex=${(queryParams.get("page")-1) * 40}&maxResults=40&orderBy=relevance`
       )
         .then((response) => {return response.json()})
         .then((d) => {
@@ -46,17 +46,7 @@ export default function() {
     <>
       <SearchBar onSubmit={() =>search()}/>
       <BookGrid books={data}/>
-      <nav aria-label="Book search result pages">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-      </nav>
       <p>{JSON.stringify(data)}</p>
-
 
     </>
   );

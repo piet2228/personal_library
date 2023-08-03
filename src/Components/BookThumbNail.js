@@ -6,15 +6,6 @@ export default function BookThumbNail({imageSrc, title, author, pubDate, link}) 
     margin: '1rem'
   }
   return (
-/*     <button className="flexbox-container" onClick={() => console.log("hi")}> 
-      <img src={imageSrc}/>
-      <div>      
-        <h1>{title}</h1>
-        <p>{`${author} - ${pubDate}`}</p>
-      </div> 
-
-    </button> */
-
     <a href={link} style={myStyle}>
       <Card>
         <Card.Img variant="top" src={imageSrc} alt={"No image found"} />
