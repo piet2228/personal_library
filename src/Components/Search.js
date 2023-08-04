@@ -9,11 +9,17 @@ export default function() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [queryParams] = useSearchParams();
+  const maxResults = 40;
+  const pageNum = queryParams.get("page");
   const search = () => {
     if (queryParams.get("search_bar") != null){
       setLoading(true);
       fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=${queryParams.get("search_bar")}&startIndex=${(queryParams.get("page")-1) * 40}&maxResults=40&orderBy=relevance`
+        `https://www.googleapis.com/books/v1/volumes?q=`
+        +`${queryParams.get("search_bar")}`
+        +`&startIndex=${(pageNum-1)*maxResults}`
+        +`&maxResults=${maxResults}`
+        +`&orderBy=relevance`
       )
         .then((response) => {return response.json()})
         .then((d) => {
@@ -42,9 +48,17 @@ export default function() {
       </>
     )
   }
+  else if (data == null){
+    return (
+      <>
+        <SearchBar onSubmit={() => search()}/>
+      </>
+    )
+  }
   return (
     <>
       <SearchBar onSubmit={() =>search()}/>
+      <p>Showing results {pageNum } out of {Math.ceil(data.d.totalItems/maxResults)} pages of results</p>
       <BookGrid books={data}/>
       <p>{JSON.stringify(data)}</p>
 
