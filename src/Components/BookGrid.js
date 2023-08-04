@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import BookThumbNail from "./BookThumbNail";
 import { useSearchParams } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function BookGrid() {
   const [data, setData] = useState(null);
@@ -8,7 +9,7 @@ export default function BookGrid() {
   const [error, setError] = useState(null);
   const [queryParams] = useSearchParams();
   const [pageNum, setPageNum] = useState(0);
-  const maxResults = 40;
+  const maxResults = 10;
   const search = () => {
     if (queryParams.get("search_bar") != null){
       setLoading(true);
@@ -22,6 +23,7 @@ export default function BookGrid() {
         .then((response) => {return response.json()})
         .then((d) => {
           setData({d});
+          setPageNum(pageNum+1);
         })
         .then(() => {
           setLoading(false);
@@ -31,7 +33,6 @@ export default function BookGrid() {
   }
   const fetchMoreData = () => {
     if (queryParams.get("search_bar") != null){
-      setLoading(true);
       fetch(
         `https://www.googleapis.com/books/v1/volumes?q=`
         +`${queryParams.get("search_bar")}`
@@ -41,9 +42,12 @@ export default function BookGrid() {
       )
         .then((response) => {return response.json()})
         .then((d) => {
+          console.log(d);
+          console.log(d.d)
           let newData = Object.assign(data);
-          newData.d.items.push(d.d.items)
+          newData.d.items = newData.d.items.concat(d.items);
           setData(newData);
+          console.log(data);
           setPageNum(pageNum+1);
         })
         .then(() => {
@@ -57,34 +61,41 @@ export default function BookGrid() {
     return <p>Loading...</p>
   }
   if (error){
+    console.log(error)
     return <pre>JSON.stringify(error)</pre>
   }
   if (data !== null && data.d.items !== undefined && data.d.items !== null){
     return (
-      <div className="flexbox-grid">
+      <InfiniteScroll className="flexbox-grid"
+        dataLength={data.d.items.length}
+        next={fetchMoreData}
+        hasMore={true} //temp
+        loader={<p>Loading...</p>}
+
+      >
         {data.d.items.map( (book) => {
-          return(
-            <BookThumbNail 
-              imageSrc={
-                book.volumeInfo.imageLinks ?
-                book.volumeInfo.imageLinks.thumbnail:
-                null
-              } 
-              title={book.volumeInfo.title ?
-                book.volumeInfo.title:
-                'N/A'
-              } 
-              author={
-                book.volumeInfo.authors ?
-                book.volumeInfo.authors[0]:
-                'N/A'
-              }
-              pubDate={book.volumeInfo.publishedDate}
-              link={book.volumeInfo.infoLink}
-              />
-          );
+        return(
+          <BookThumbNail 
+            imageSrc={
+              book.volumeInfo.imageLinks ?
+              book.volumeInfo.imageLinks.thumbnail:
+              null
+            } 
+            title={book.volumeInfo.title ?
+              book.volumeInfo.title:
+              'N/A'
+            } 
+            author={
+              book.volumeInfo.authors ?
+              book.volumeInfo.authors[0]:
+              'N/A'
+            }
+            pubDate={book.volumeInfo.publishedDate}
+            link={book.volumeInfo.infoLink}
+            />
+        );
         })}
-      </div>
+      </InfiniteScroll>
     );
   }
   return <p>No items found</p>
