@@ -9,6 +9,7 @@ export default function BookGrid() {
   const [error, setError] = useState(null);
   const [queryParams] = useSearchParams();
   const [pageNum, setPageNum] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const maxResults = 10;
   const search = () => {
     if (queryParams.get("search_bar") != null){
@@ -42,16 +43,22 @@ export default function BookGrid() {
       )
         .then((response) => {return response.json()})
         .then((d) => {
+          console.log(        
+            `https://www.googleapis.com/books/v1/volumes?q=`
+          +`${queryParams.get("search_bar")}`
+          +`&startIndex=${pageNum * maxResults}`
+          +`&maxResults=${maxResults}`
+          +`&orderBy=relevance`);
           console.log(d);
-          console.log(d.d)
-          let newData = Object.assign(data);
-          newData.d.items = newData.d.items.concat(d.items);
-          setData(newData);
-          console.log(data);
-          setPageNum(pageNum+1);
-        })
-        .then(() => {
-          setLoading(false);
+          if(d.items === undefined){
+            setHasMore(false)
+          }
+          else{ 
+            let newData = Object.assign(data);
+            newData.d.items = newData.d.items.concat(d.items);
+            setData(newData);
+            setPageNum(pageNum+1);
+          }
         })
         .catch(setError);
     }
@@ -69,8 +76,8 @@ export default function BookGrid() {
       <InfiniteScroll className="flexbox-grid"
         dataLength={data.d.items.length}
         next={fetchMoreData}
-        hasMore={true} //temp
-        loader={<p>Loading...</p>}
+        hasMore={hasMore}
+        loader={<h2>Loading...</h2>}
 
       >
         {data.d.items.map( (book) => {
@@ -96,6 +103,7 @@ export default function BookGrid() {
         );
         })}
       </InfiniteScroll>
+
     );
   }
   return <p>No items found</p>
