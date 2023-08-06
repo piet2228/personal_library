@@ -20,12 +20,7 @@ export default function BookInfo() {
     .catch(setError)
   }
   useEffect(fetchBook, []);
-  /*
-  const getBestImage = () => {
-    let images = Object.values(data.volumeInfo.imageLinks);
-    console.log(images)
-    return images[images.length-1];
-  }*/
+
   if(loading){
     return <p>Loading...</p>
   }
@@ -56,6 +51,7 @@ export default function BookInfo() {
         (id) => {
         return (<p>{id.type}: {id.identifier}</p>);
       })}
-      <button type="button" class="btn btn-primary btn-lg">Add to library</button>    </div>
+      <button type="button" class="btn btn-primary btn-lg">Add to library</button>    
+    </div>
   )
 }
