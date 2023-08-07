@@ -98,7 +98,7 @@ export default function BookGrid() {
               'N/A'
             }
             pubDate={book.volumeInfo.publishedDate}
-            link={book.volumeInfo.infoLink}
+            link={`/book/?bookId=${book.id}`}
             />
         );
         })}
