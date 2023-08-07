@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom"
 
+function removeHTMLTags(input) {
+  return input.replace(/<[^>]+>/g, '');
+}
 export default function BookInfo() {
-  function removeHTMLTags(input) {
-    return input.replace(/<[^>]+>/g, '');
-  }
+
   const [queryParams] = useSearchParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -36,7 +37,7 @@ export default function BookInfo() {
         src={data.volumeInfo.imageLinks.thumbnail} 
         alt={data.volumeInfo.title + "cover image"}
         style={{float:"right"}}/>    
-      <h1 className="display-1">{data.volumeInfo.title}</h1>
+      <h3 className="display-3">{data.volumeInfo.title}</h3>
 
       <h4>Authors:</h4>
       {data.volumeInfo.authors && data.volumeInfo.authors.map( (author) => <p>{author}</p>)}
@@ -45,9 +46,9 @@ export default function BookInfo() {
       <h4>Released on</h4>
       {data.volumeInfo.publishedDate}
       <h4>Description:</h4>
-      <p>{removeHTMLTags(data.volumeInfo.description)}</p>
+      {data.volumeInfo.description && <p>{removeHTMLTags(data.volumeInfo.description)}</p>}
       <h4>Identifiers</h4>
-      {data.volumeInfo.industryIdentifiers.map( 
+      {data.volumeInfo.industryIdentifiers && data.volumeInfo.industryIdentifiers.map( 
         (id) => {
         return (<p>{id.type}: {id.identifier}</p>);
       })}
