@@ -52,7 +52,7 @@ export default function SignUp() {
           />
         </div>
         <button type="submit" class="btn btn-primary" onClick={onSubmit}>
-          Submit
+          Sign Up
         </button>
       </form>
     </div>
