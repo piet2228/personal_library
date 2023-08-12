@@ -5,6 +5,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase-config";
 export default function AccountPage() {
   const [userState, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const handleLogOut = () => {
     signOut(auth)
       .then(() => {
@@ -22,14 +23,26 @@ export default function AccountPage() {
         const uid = user.uid;
         console.log("uid", uid);
         setUser(user);
+        setLoading(false);
       } else {
         // User is signed out
         console.log("user is logged out");
+        setLoading(false);
       }
     });
   }, []);
-  if (userState == null) {
-    return <Login />;
+  if (loading) {
+    return (
+      <Container className="mt-1">
+        <p>Getting Account Info</p>
+      </Container>
+    );
+  } else if (userState == null) {
+    return (
+      <Container className="mt-1">
+        <Login />
+      </Container>
+    );
   } else {
     return (
       <Container className="mt-1">
