@@ -23,3 +23,8 @@ code {
   flex-direction: row;
   margin: 10px;
 }
+.center-container{
+  margin-top: 4rem;
+  
+  padding: 4rem;
+}
