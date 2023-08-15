@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "server for personal library, holds user data and book data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piet2228/personal_library.git"
+  },
+  "author": "Pieter Austin Ruslim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/piet2228/personal_library/issues"
+  },
+  "homepage": "https://github.com/piet2228/personal_library#readme"
+}
