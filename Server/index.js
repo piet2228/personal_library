@@ -20,16 +20,16 @@ app.post("/books", async (req, res) => {
   try {
     const { volume_id, title, author, thumbnail } = req.body;
     const newBook = await pool.query(
-      `INSERT INTO Books(volume_id, title, author, thumnail) 
-      VALUES ($1, $2, $3, $4)
-      ON CONFLICT ON CONSTRAINT (volume_id)
-      UPDATE SET
+      `INSERT INTO Books(volume_id, title, author, thumbnail) VALUES ($1, $2, $3, $4)
+      ON CONFLICT (volume_id)
+      DO UPDATE SET
         title = $2,
         author = $3,
-        thumnail = $4;`,
+        thumbnail = $4
+      RETURNING *`,
       [volume_id, title, author, thumbnail]
     );
-    //res.json(newTodo.rows[0]);
+    res.json(newBook.rows[0]);
   } catch (err) {
     console.error(err.message);
     res.json({ error: err });
@@ -56,8 +56,8 @@ app.post("/Collection", async (req, res) => {
 //get all books
 app.get("/books", async (req, res) => {
   try {
-    const allTodos = await pool.query("SELECT * FROM Books");
-    res.json(allTodos.rows);
+    const allBooks = await pool.query("SELECT * FROM Books");
+    res.json(allBooks.rows);
   } catch (err) {
     console.log(err.message);
     res.json(err);
@@ -68,13 +68,13 @@ app.get("/Collection/:user_id", async (req, res) => {
   try {
     console.log(req.params);
     const { user_id } = req.params;
-    const todo = await pool.query(
+    const books = await pool.query(
       `SELECT *
       FROM Books JOIN Owns ON Books.volume_id = Owns.volume_id
       WHERE Owns.user_id = $1;`,
       [user_id]
     );
-    res.json(todo.rows[0]);
+    res.json(books.rows);
   } catch (err) {
     console.log(err);
     res.json(err);
@@ -82,14 +82,17 @@ app.get("/Collection/:user_id", async (req, res) => {
 });
 
 //remove book from user's collection
-app.delete("todos/:id", async (req, res) => {
+app.delete("/Collection", async (req, res) => {
   try {
-    const { user_id, volume_id } = req.params;
+    const { user_id, volume_id } = req.body;
+    console.log(user_id + volume_id);
     const deleteTodo = await pool.query(
-      "DELETE * FROM todo WHERE user_id = $1 AND volume_id = $2",
+      `DELETE FROM Owns 
+      WHERE user_id = $1 AND volume_id = $2
+      RETURNING *`,
       [user_id, volume_id]
     );
-    res.json("Deleted");
+    res.json(deleteTodo.rows);
   } catch (err) {
     console.log(err);
     res.json(err);

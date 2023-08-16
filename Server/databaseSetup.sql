@@ -12,3 +12,9 @@ CREATE TABLE Owns (
     FOREIGN KEY(volume_id)
       REFERENCES Books(volume_id)
 );
+
+-- DELETE FROM Books B
+-- WHERE NOT EXISTS
+-- (SELECT volume_id, user_id 
+--   FROM Books JOIN Owns ON (Books.volume_id = Owns.volume_id)
+--   WHERE volume_id = $1 )
