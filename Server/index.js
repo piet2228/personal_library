@@ -1,12 +1,17 @@
+const dotenv = require("dotenv");
+dotenv.config({ path: `./config.env` });
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const pool = require("./db");
+const Pool = require("pg").Pool;
+const pool = new Pool();
 //middleware
 app.use(cors());
 app.use(express.json());
 app.listen(5000, () => {
   console.log("server started");
+  console.log(process.env.PGUSER);
+  console.log(process.env.PGDATABASE);
 });
 //Routes//
 
@@ -14,34 +19,38 @@ app.listen(5000, () => {
 app.post("/books", async (req, res) => {
   try {
     const { volume_id, title, author, thumbnail } = req.body;
-    const newTodo = await pool.query(
+    const newBook = await pool.query(
       `INSERT INTO Books(volume_id, title, author, thumnail) 
       VALUES ($1, $2, $3, $4)
       ON CONFLICT ON CONSTRAINT (volume_id)
       UPDATE SET
         title = $2,
         author = $3,
-        thumnail = $4`,
+        thumnail = $4;`,
       [volume_id, title, author, thumbnail]
     );
-    res.json(newTodo.rows[0]);
+    //res.json(newTodo.rows[0]);
   } catch (err) {
     console.error(err.message);
+    res.json({ error: err });
   }
 });
 
 //add an existing book to a user's collection
-app.post("/books", async (req, res) => {
+app.post("/Collection", async (req, res) => {
+  const { user_id, volume_id } = req.body;
+  console.log(user_id);
   try {
-    const { user_id, volume_id } = req.body;
     const newTodo = await pool.query(
       `INSERT INTO Owns(volume_id, user_id) 
-      VALUES ($1, $2)`,
+      VALUES ($1, $2);`,
       [volume_id, user_id]
     );
     res.json(newTodo.rows[0]);
   } catch (err) {
+    console.log("ERROR");
     console.error(err.message);
+    res.json(err);
   }
 });
 //get all books
@@ -51,10 +60,11 @@ app.get("/books", async (req, res) => {
     res.json(allTodos.rows);
   } catch (err) {
     console.log(err.message);
+    res.json(err);
   }
 });
 //get all books that belong to a user
-app.get("todos/:id", async (req, res) => {
+app.get("/Collection/:user_id", async (req, res) => {
   try {
     console.log(req.params);
     const { user_id } = req.params;
@@ -67,6 +77,7 @@ app.get("todos/:id", async (req, res) => {
     res.json(todo.rows[0]);
   } catch (err) {
     console.log(err);
+    res.json(err);
   }
 });
 
@@ -81,5 +92,6 @@ app.delete("todos/:id", async (req, res) => {
     res.json("Deleted");
   } catch (err) {
     console.log(err);
+    res.json(err);
   }
 });
