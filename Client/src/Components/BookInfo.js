@@ -43,8 +43,11 @@ export default function BookInfo() {
       title: `${data.volumeInfo.title ? data.volumeInfo.title : "N/A"}`,
       author: `${data.volumeInfo.authors ? data.volumeInfo.authors[0] : "N/A"}`,
       thumbnail: data.volumeInfo.imageLinks.thumbnail,
+      published_date: `${
+        data.volumeInfo.publishedDate ? data.volumeInfo.publishedDate : "N/A"
+      }`,
     });
-    console.log(bodyContent);
+    console.log(`bodyContent`);
     fetch(
       `http://${process.env.REACT_APP_SERVERHOST}:${process.env.REACT_APP_SERVERPORT}/books`,
       {

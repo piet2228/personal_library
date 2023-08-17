@@ -16,18 +16,18 @@ app.listen(5000, () => {
 //add a book to db
 app.post("/books", async (req, res) => {
   try {
-    const { volume_id, title, author, thumbnail } = req.body;
-    console.log(req.body);
-    console.log(title);
+    const { volume_id, title, author, thumbnail, published_date } = req.body;
+    console.log(`body: ${JSON.stringify(req.body)}`);
     const newBook = await pool.query(
-      `INSERT INTO Books(volume_id, title, author, thumbnail) VALUES ($1, $2, $3, $4)
+      `INSERT INTO Books(volume_id, title, author, thumbnail, published_date) VALUES ($1, $2, $3, $4, $5)
       ON CONFLICT (volume_id)
       DO UPDATE SET
         title = $2,
         author = $3,
-        thumbnail = $4
+        thumbnail = $4,
+        published_date= $5
       RETURNING *`,
-      [volume_id, title, author, thumbnail]
+      [volume_id, title, author, thumbnail, published_date]
     );
     res.json(newBook.rows[0]);
   } catch (err) {

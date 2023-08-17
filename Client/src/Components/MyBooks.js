@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { auth } from "../firebase-config";
 import { onAuthStateChanged } from "firebase/auth";
+import BookThumbNail from "./BookThumbNail";
 
 export default function MyBooks() {
   const [data, setData] = useState(null);
@@ -41,11 +42,22 @@ export default function MyBooks() {
   }, []);
   return (
     <>
-      <p>TEST</p>
-      <p>{`${process.env.REACT_APP_SERVERHOST}:${process.env.REACT_APP_SERVERPORT}`}</p>
-      <p>{JSON.stringify(data)}</p>
       <p>{loading}</p>
-      <p>{JSON.stringify(error)}</p>
+      <div className="flexbox-grid">
+        {data &&
+          data.map((book) => {
+            //imageSrc, title, author, pubDate, link
+            return (
+              <BookThumbNail
+                imageSrc={book.thumbnail}
+                title={book.title}
+                author={book.author}
+                link={`book/?bookId=${book.volume_id}`}
+                pubDate={book.published_date}
+              />
+            );
+          })}
+      </div>
     </>
   );
 }

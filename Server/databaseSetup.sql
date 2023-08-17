@@ -2,7 +2,8 @@ CREATE TABLE Books (
   volume_id VARCHAR(255) PRIMARY KEY,
   title VARCHAR(255),
   author VARCHAR(255),
-  thumbnail VARCHAR(300)
+  thumbnail VARCHAR(300),
+  published_date VARCHAR(32)
 );
 CREATE TABLE Owns (
   user_id VARCHAR(255),
