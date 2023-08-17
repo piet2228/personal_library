@@ -11,6 +11,7 @@ import Login from "./Components/Login";
 import SignUp from "./Components/SignUp";
 import NavBar from "./Components/NavBar";
 import AccountPage from "./Components/AccountPage";
+import MyBooks from "./Components/MyBooks";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/book" element={<BookInfo />} />
           <Route path="/login" element={<AccountPage />} />
           <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/my-books" element={<MyBooks />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -10,8 +10,6 @@ app.use(cors());
 app.use(express.json());
 app.listen(5000, () => {
   console.log("server started");
-  console.log(process.env.PGUSER);
-  console.log(process.env.PGDATABASE);
 });
 //Routes//
 
@@ -19,6 +17,8 @@ app.listen(5000, () => {
 app.post("/books", async (req, res) => {
   try {
     const { volume_id, title, author, thumbnail } = req.body;
+    console.log(req.body);
+    console.log(title);
     const newBook = await pool.query(
       `INSERT INTO Books(volume_id, title, author, thumbnail) VALUES ($1, $2, $3, $4)
       ON CONFLICT (volume_id)
@@ -47,6 +47,7 @@ app.post("/Collection", async (req, res) => {
       [volume_id, user_id]
     );
     res.json(newTodo.rows[0]);
+    console.log("Book registered");
   } catch (err) {
     console.log("ERROR");
     console.error(err.message);
@@ -75,6 +76,7 @@ app.get("/Collection/:user_id", async (req, res) => {
       [user_id]
     );
     res.json(books.rows);
+    console.log(books.rows);
   } catch (err) {
     console.log(err);
     res.json(err);

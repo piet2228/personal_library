@@ -11,7 +11,6 @@ export default function NavBar() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
-        console.log("uid", uid);
         setUser(user);
       } else {
         // User is signed out
@@ -25,6 +24,7 @@ export default function NavBar() {
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
           <Nav.Link href="/search">Search</Nav.Link>
+          <Nav.Link href="/my-books">My Books</Nav.Link>
         </Nav>
         <Navbar.Text>
           <a href="/login">
