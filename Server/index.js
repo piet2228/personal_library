@@ -17,7 +17,6 @@ app.listen(5000, () => {
 app.post("/books", async (req, res) => {
   try {
     const { volume_id, title, author, thumbnail, published_date } = req.body;
-    console.log(`body: ${JSON.stringify(req.body)}`);
     const newBook = await pool.query(
       `INSERT INTO Books(volume_id, title, author, thumbnail, published_date) VALUES ($1, $2, $3, $4, $5)
       ON CONFLICT (volume_id)
@@ -39,7 +38,6 @@ app.post("/books", async (req, res) => {
 //add an existing book to a user's collection
 app.post("/Collection", async (req, res) => {
   const { user_id, volume_id } = req.body;
-  console.log(user_id);
   try {
     const newTodo = await pool.query(
       `INSERT INTO Owns(volume_id, user_id) 
@@ -47,9 +45,7 @@ app.post("/Collection", async (req, res) => {
       [volume_id, user_id]
     );
     res.json(newTodo.rows[0]);
-    console.log("Book registered");
   } catch (err) {
-    console.log("ERROR");
     console.error(err.message);
     res.json(err);
   }
@@ -67,7 +63,6 @@ app.get("/books", async (req, res) => {
 //get all books that belong to a user
 app.get("/Collection/:user_id", async (req, res) => {
   try {
-    console.log(req.params);
     const { user_id } = req.params;
     const books = await pool.query(
       `SELECT *
@@ -76,7 +71,6 @@ app.get("/Collection/:user_id", async (req, res) => {
       [user_id]
     );
     res.json(books.rows);
-    console.log(books.rows);
   } catch (err) {
     console.log(err);
     res.json(err);
@@ -86,8 +80,8 @@ app.get("/Collection/:user_id", async (req, res) => {
 //remove book from user's collection
 app.delete("/Collection", async (req, res) => {
   try {
+    console.log("delete");
     const { user_id, volume_id } = req.body;
-    console.log(user_id + volume_id);
     const deleteTodo = await pool.query(
       `DELETE FROM Owns 
       WHERE user_id = $1 AND volume_id = $2

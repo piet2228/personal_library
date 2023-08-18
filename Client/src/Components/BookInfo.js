@@ -9,14 +9,14 @@ function removeHTMLTags(input) {
 export default function BookInfo() {
   const [queryParams] = useSearchParams();
   const [data, setData] = useState(null);
+  const [inCollection, setInCollection] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
+  const bookId = queryParams.get("bookId");
   const fetchBook = () => {
     setLoading(true);
-    fetch(
-      `https://www.googleapis.com/books/v1/volumes/${queryParams.get("bookId")}`
-    )
+    fetch(`https://www.googleapis.com/books/v1/volumes/${bookId}`)
       .then((response) => {
         return response.json();
       })
@@ -37,9 +37,34 @@ export default function BookInfo() {
       }
     });
   };
+  const checkBook = () => {
+    if (user == null) {
+      return;
+    }
+    fetch(
+      `http://${process.env.REACT_APP_SERVERHOST}:${process.env.REACT_APP_SERVERPORT}/Collection/${user.uid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((d) => {
+        const matches = d.filter((book) => book.volume_id == bookId);
+        if (matches.length > 0) {
+          setInCollection(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err.message());
+      });
+  };
   const addBook = async () => {
     let bodyContent = JSON.stringify({
-      volume_id: queryParams.get("bookId"),
+      volume_id: bookId,
       title: `${data.volumeInfo.title ? data.volumeInfo.title : "N/A"}`,
       author: `${data.volumeInfo.authors ? data.volumeInfo.authors[0] : "N/A"}`,
       thumbnail: data.volumeInfo.imageLinks.thumbnail,
@@ -70,7 +95,7 @@ export default function BookInfo() {
   const registerBook = () => {
     let bodyContent = JSON.stringify({
       user_id: user.uid,
-      volume_id: queryParams.get("bookId"),
+      volume_id: bookId,
     });
     fetch(
       `http://${process.env.REACT_APP_SERVERHOST}:${process.env.REACT_APP_SERVERPORT}/Collection`,
@@ -81,13 +106,45 @@ export default function BookInfo() {
           "Content-Type": "application/json",
         },
       }
-    ).catch((err) => {
-      console.log(err);
-      alert(err.message());
+    )
+      .then(() => {
+        setInCollection(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err.message());
+      });
+  };
+  const deregisterBook = () => {
+    let bodyContent = JSON.stringify({
+      user_id: user.uid,
+      volume_id: bookId,
     });
+    fetch(
+      `http://${process.env.REACT_APP_SERVERHOST}:${process.env.REACT_APP_SERVERPORT}/Collection`,
+      {
+        method: "DELETE",
+        body: bodyContent,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => {
+        setInCollection(false);
+        return response.json();
+      })
+      .then((d) => {
+        console.log(d);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err.message());
+      });
   };
   useEffect(fetchBook, []);
   useEffect(getUser, []);
+  useEffect(checkBook, [user]);
   if (loading) {
     return <p>Loading...</p>;
   } else if (error) {
@@ -125,16 +182,33 @@ export default function BookInfo() {
             </p>
           );
         })}
-      {user && (
+
+      {!inCollection && (
         <button
           type="button"
           class="btn btn-primary btn-lg"
           onClick={(event) => {
+            if (user == null) {
+              alert("Please login to save books");
+              return;
+            }
             event.preventDefault();
             addBook();
           }}
         >
           Add to library
+        </button>
+      )}
+      {inCollection && (
+        <button
+          type="button"
+          class="btn btn-secondary btn-lg"
+          onClick={(event) => {
+            event.preventDefault();
+            deregisterBook();
+          }}
+        >
+          Remove from Library
         </button>
       )}
     </div>
