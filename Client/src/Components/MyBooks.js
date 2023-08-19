@@ -16,14 +16,10 @@ export default function MyBooks() {
       if (user) {
         const uid = user.uid;
         setUser(user);
-        console.log(
-          `http://${process.env.REACT_APP_SERVERHOST}:${process.env.REACT_APP_SERVERPORT}/Collection/${uid}`
-        );
         fetch(
           `http://${process.env.REACT_APP_SERVERHOST}:${process.env.REACT_APP_SERVERPORT}/Collection/${uid}`
         )
           .then((response) => {
-            console.log(`fetching ${response}`);
             return response.json();
           })
           .then((d) => {
@@ -37,8 +33,7 @@ export default function MyBooks() {
             console.log(err);
           });
       } else {
-        // User is signed out
-        console.log("user is logged out");
+        setUser(null);
       }
     });
   }, []);

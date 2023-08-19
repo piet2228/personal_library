@@ -43,13 +43,6 @@ export default function BookGrid() {
       )
         .then((response) => {return response.json()})
         .then((d) => {
-          console.log(        
-            `https://www.googleapis.com/books/v1/volumes?q=`
-          +`${queryParams.get("search_bar")}`
-          +`&startIndex=${pageNum * maxResults}`
-          +`&maxResults=${maxResults}`
-          +`&orderBy=relevance`);
-          console.log(d);
           if(d.items === undefined){
             setHasMore(false)
           }

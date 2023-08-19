@@ -8,8 +8,8 @@ const pool = new Pool();
 //middleware
 app.use(cors());
 app.use(express.json());
-app.listen(5000, () => {
-  console.log("server started");
+app.listen(process.env.REACT_APP_SERVERPORT || 5000, () => {
+  console.log(`server started on ${process.env.REACT_APP_SERVERPORT}`);
 });
 //Routes//
 

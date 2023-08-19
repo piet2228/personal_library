@@ -21,12 +21,10 @@ export default function AccountPage() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
-        console.log("uid", uid);
         setUser(user);
         setLoading(false);
       } else {
-        // User is signed out
-        console.log("user is logged out");
+        setUser(null);
         setLoading(false);
       }
     });

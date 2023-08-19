@@ -30,10 +30,9 @@ export default function BookInfo() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
-        console.log("uid", uid);
         setUser(user);
       } else {
-        console.log("user is logged out");
+        setUser(null);
       }
     });
   };
@@ -72,7 +71,6 @@ export default function BookInfo() {
         data.volumeInfo.publishedDate ? data.volumeInfo.publishedDate : "N/A"
       }`,
     });
-    console.log(`bodyContent`);
     fetch(
       `http://${process.env.REACT_APP_SERVERHOST}:${process.env.REACT_APP_SERVERPORT}/books`,
       {
@@ -84,7 +82,6 @@ export default function BookInfo() {
       }
     )
       .then(() => {
-        console.log("post confirmed");
         registerBook();
       })
       .catch((err) => {
@@ -135,7 +132,6 @@ export default function BookInfo() {
         return response.json();
       })
       .then((d) => {
-        console.log(d);
       })
       .catch((err) => {
         console.log(err);

@@ -13,7 +13,7 @@ export default function NavBar() {
         const uid = user.uid;
         setUser(user);
       } else {
-        console.log("user is logged out");
+        setUser(null);
       }
     });
   }, []);
