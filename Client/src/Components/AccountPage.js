@@ -46,8 +46,8 @@ export default function AccountPage() {
   } else {
     return (
       <Container className="mt-1">
-        <h1>{userState.email}</h1>
-        <h2>{userState.uid}</h2>
+        <h2>You are currently logged in as:</h2>
+        <h2>{userState.email}</h2>
         <Button onClick={handleLogOut}>Log Out</Button>
       </Container>
     );

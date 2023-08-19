@@ -13,7 +13,6 @@ export default function NavBar() {
         const uid = user.uid;
         setUser(user);
       } else {
-        // User is signed out
         console.log("user is logged out");
       }
     });
@@ -27,9 +26,7 @@ export default function NavBar() {
           <Nav.Link href="/my-books">My Books</Nav.Link>
         </Nav>
         <Navbar.Text>
-          <a href="/login">
-            {userState ? `Signed in as: ${userState.email}` : "Not signed in"}
-          </a>
+          <a href="/login">{userState ? "Log out" : "Sign in"}</a>
         </Navbar.Text>
       </Navbar.Collapse>
     </Navbar>

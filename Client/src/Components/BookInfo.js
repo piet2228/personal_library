@@ -183,7 +183,7 @@ export default function BookInfo() {
           );
         })}
 
-      {!inCollection && (
+      {user && !inCollection && (
         <button
           type="button"
           class="btn btn-primary btn-lg"
@@ -199,7 +199,7 @@ export default function BookInfo() {
           Add to library
         </button>
       )}
-      {inCollection && (
+      {user && inCollection && (
         <button
           type="button"
           class="btn btn-secondary btn-lg"
