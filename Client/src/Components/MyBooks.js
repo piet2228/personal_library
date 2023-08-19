@@ -5,6 +5,7 @@ import BookThumbNail from "./BookThumbNail";
 
 export default function MyBooks() {
   const [data, setData] = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const fetchOptions = {
@@ -14,6 +15,7 @@ export default function MyBooks() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
+        setUser(user);
         console.log(
           `http://${process.env.REACT_APP_SERVERHOST}:${process.env.REACT_APP_SERVERPORT}/Collection/${uid}`
         );
@@ -42,11 +44,10 @@ export default function MyBooks() {
   }, []);
   return (
     <>
-      <p>{loading}</p>
-      <div className="flexbox-grid">
+      <div className="flexbox-grid container">
+        {user == null && <p>Please Sign In to save books to your library</p>}
         {data &&
           data.map((book) => {
-            //imageSrc, title, author, pubDate, link
             return (
               <BookThumbNail
                 imageSrc={book.thumbnail}
