@@ -1,4 +1,3 @@
-import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { auth } from "../firebase-config";

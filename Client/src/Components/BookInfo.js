@@ -131,8 +131,7 @@ export default function BookInfo() {
         setInCollection(false);
         return response.json();
       })
-      .then((d) => {
-      })
+      .then((d) => {})
       .catch((err) => {
         console.log(err);
         alert(err.message());

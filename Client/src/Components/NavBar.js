@@ -2,7 +2,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useState } from "react";
 import { useEffect } from "react";
 import { auth } from "../firebase-config";
-import { Navbar, Nav, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
 
 export default function NavBar() {
   const [userState, setUser] = useState(null);

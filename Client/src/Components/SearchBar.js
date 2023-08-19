@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { Button, Form, InputGroup } from "react-bootstrap";
-import {
-  createSearchParams,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function SearchBar() {
   const [queryParams] = useSearchParams();

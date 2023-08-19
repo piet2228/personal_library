@@ -1,9 +1,7 @@
-import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { auth } from "../firebase-config";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import NavBar from "./NavBar";
 export default function Login() {
   const navigate = useNavigate();
 
