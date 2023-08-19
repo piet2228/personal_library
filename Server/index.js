@@ -14,7 +14,7 @@ app.listen(process.env.REACT_APP_SERVERPORT || 5000, () => {
 //Routes//
 
 //add a book to db
-app.post("/books", async (req, res) => {
+app.post("/api/books", async (req, res) => {
   try {
     const { volume_id, title, author, thumbnail, published_date } = req.body;
     const newBook = await pool.query(
@@ -36,7 +36,7 @@ app.post("/books", async (req, res) => {
 });
 
 //add an existing book to a user's collection
-app.post("/Collection", async (req, res) => {
+app.post("/api/Collection", async (req, res) => {
   const { user_id, volume_id } = req.body;
   try {
     const newTodo = await pool.query(
@@ -51,7 +51,7 @@ app.post("/Collection", async (req, res) => {
   }
 });
 //get all books
-app.get("/books", async (req, res) => {
+app.get("/api/books", async (req, res) => {
   try {
     const allBooks = await pool.query("SELECT * FROM Books");
     res.json(allBooks.rows);
@@ -61,7 +61,7 @@ app.get("/books", async (req, res) => {
   }
 });
 //get all books that belong to a user
-app.get("/Collection/:user_id", async (req, res) => {
+app.get("/api/Collection/:user_id", async (req, res) => {
   try {
     const { user_id } = req.params;
     const books = await pool.query(
@@ -78,7 +78,7 @@ app.get("/Collection/:user_id", async (req, res) => {
 });
 
 //remove book from user's collection
-app.delete("/Collection", async (req, res) => {
+app.delete("/api/Collection", async (req, res) => {
   try {
     console.log("delete");
     const { user_id, volume_id } = req.body;

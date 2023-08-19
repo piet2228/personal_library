@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { auth } from "../firebase-config";
 import { onAuthStateChanged } from "firebase/auth";
 import BookThumbNail from "./BookThumbNail";
+import baseUrl from "../apis/LibraryApi";
 
 export default function MyBooks() {
   const [data, setData] = useState(null);
@@ -16,9 +17,7 @@ export default function MyBooks() {
       if (user) {
         const uid = user.uid;
         setUser(user);
-        fetch(
-          `http://${process.env.REACT_APP_SERVERHOST}:${process.env.REACT_APP_SERVERPORT}/Collection/${uid}`
-        )
+        fetch(`${baseUrl}/Collection/${uid}`)
           .then((response) => {
             return response.json();
           })

@@ -2,6 +2,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { auth } from "../firebase-config";
+import baseUrl from "../apis/LibraryApi";
 
 function removeHTMLTags(input) {
   return input.replace(/<[^>]+>/g, "");
@@ -40,15 +41,12 @@ export default function BookInfo() {
     if (user == null) {
       return;
     }
-    fetch(
-      `http://${process.env.REACT_APP_SERVERHOST}:${process.env.REACT_APP_SERVERPORT}/Collection/${user.uid}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch(`${baseUrl}/Collection/${user.uid}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => response.json())
       .then((d) => {
         const matches = d.filter((book) => book.volume_id == bookId);
@@ -71,16 +69,13 @@ export default function BookInfo() {
         data.volumeInfo.publishedDate ? data.volumeInfo.publishedDate : "N/A"
       }`,
     });
-    fetch(
-      `http://${process.env.REACT_APP_SERVERHOST}:${process.env.REACT_APP_SERVERPORT}/books`,
-      {
-        method: "POST",
-        body: bodyContent,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch(`${baseUrl}/books`, {
+      method: "POST",
+      body: bodyContent,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then(() => {
         registerBook();
       })
@@ -94,16 +89,13 @@ export default function BookInfo() {
       user_id: user.uid,
       volume_id: bookId,
     });
-    fetch(
-      `http://${process.env.REACT_APP_SERVERHOST}:${process.env.REACT_APP_SERVERPORT}/Collection`,
-      {
-        method: "POST",
-        body: bodyContent,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch(`${baseUrl}/Collection`, {
+      method: "POST",
+      body: bodyContent,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then(() => {
         setInCollection(true);
       })
@@ -117,16 +109,13 @@ export default function BookInfo() {
       user_id: user.uid,
       volume_id: bookId,
     });
-    fetch(
-      `http://${process.env.REACT_APP_SERVERHOST}:${process.env.REACT_APP_SERVERPORT}/Collection`,
-      {
-        method: "DELETE",
-        body: bodyContent,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch(`${baseUrl}/Collection`, {
+      method: "DELETE",
+      body: bodyContent,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => {
         setInCollection(false);
         return response.json();
