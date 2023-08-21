@@ -41,6 +41,7 @@ export default function MyBooks() {
       <div className="flexbox-grid container">
         {user == null && <p>Please Sign In to save books to your library</p>}
         {data &&
+          Object.keys(data).length > 0 &&
           data.map((book) => {
             return (
               <BookThumbNail
