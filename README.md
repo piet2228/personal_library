@@ -29,3 +29,6 @@ These define where the node server is hosted
 REACT_APP_SERVERHOST
 REACT_APP_SERVERPORT
 ```
+After setting the environment variables, you can run the frontend by running
+```npm start``` on the Client folder.
+And you can run the backend by running ```node index.js``` on the Server folder.
